@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#120d18">
+<meta name="format-detection" content="telephone=no">
+<title>Play · PNC Studio</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="engine/style.css">
+<style>
+#pt-back{position:fixed;z-index:40;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;min-height:44px;border-radius:999px;font:700 15px Georgia,'Times New Roman',serif;color:#2b1d0e;text-decoration:none;
+  background:linear-gradient(180deg,#f3d48a,#c8973f 55%,#a87a2c);border:1px solid #6e4e1c;box-shadow:0 2px 0 #5a3d12,0 4px 12px rgba(0,0,0,.45)}
+#pt-err{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:20px;background:#1b130c;color:#f3ead6;font:16px/1.5 Georgia,serif;text-align:center}
+#pt-err .box{max-width:520px;background:#f3ead6;color:#2b1d0e;border-radius:10px;padding:22px;border:1px solid #c8973f;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#pt-err h2{margin:0 0 8px;font-size:22px}#pt-err pre{white-space:pre-wrap;text-align:left;font:12px/1.4 ui-monospace,Menlo,monospace;background:#e6dcc4;padding:8px;border-radius:6px;max-height:30vh;overflow:auto}
+#pt-err a,#pt-err button{display:inline-block;margin:6px;padding:10px 16px;border-radius:999px;border:1px solid #6e4e1c;background:#c8973f;color:#2b1d0e;font:700 15px Georgia,serif;text-decoration:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="screen" width="1024" height="576"></canvas>
+  </div>
+  <div id="hud">
+    <div id="caption"><img id="cap-portrait" alt=""><div><b id="cap-name"></b> <span id="cap-text"></span></div></div>
+    <div id="sentence">Walk to</div>
+    <div id="panel">
+      <div id="speaker"><img id="portrait" alt=""><div id="pname"></div></div>
+      <div id="verbs"></div>
+      <div id="inventory"></div>
+      <div id="choices"></div>
+    </div>
+    <div id="toolbar">
+      <button id="btn-hints" type="button">👁 Show hotspots</button>
+      <button id="btn-music" type="button">Music: on</button>
+      <button id="btn-voice" type="button">Voices: on</button>
+      <button id="btn-restart" type="button">Restart</button>
+      <span id="rotate-hint">↻ Rotate your phone for a bigger view</span>
+      <span class="hint" id="help-text">Tap to walk · pick a verb, then tap a thing · Use → item → target · tap to skip a line</span>
+    </div>
+  </div>
+</div>
+<div id="title" class="overlay">
+  <div class="title-card">
+    <div class="small">a generated point &amp; click adventure</div>
+    <h1 id="title-name">The Great Pickle Heist</h1>
+    <h2 id="title-sub"></h2>
+    <button id="start-btn" type="button" disabled>Loading…</button>
+    <p id="boot-msg">If this never changes to a Start button, this viewer can't run games
+      (for example an in-app file preview). Open the game's web link in Safari or Chrome instead.</p>
+    <noscript><p class="warn">JavaScript is off in this viewer, so the game can't run here. Open the game's web link in Safari or Chrome.</p></noscript>
+    <p id="boot-error" class="warn"></p>
+  </div>
+</div>
+<div id="win" class="overlay" style="display:none">
+  <div class="title-card">
+    <h1 id="win-title">CASE CLOSED</h1>
+    <p id="win-text"></p>
+    <button id="again-btn" type="button">Play again</button>
+  </div>
+</div>
+<a id="pt-back" href="index.html" aria-label="Back to the Studio">✕ Studio</a>
+<div id="pt-err" role="alert"><div class="box"><h2 id="pt-err-h">The game couldn’t start</h2><p id="pt-err-p"></p><pre id="pt-err-d" hidden></pre>
+<button type="button" onclick="location.reload()">Try again</button><a href="index.html">Back to the Studio</a></div></div>
+<script>window.STUDIO_ROOT = "";</script>
+<script src="js/paths.js"></script>
+<script>
+// Player bootstrap: load the Studio's game, never leave a black screen.
+(function () {
+  var started = Date.now();
+  function show(h, p, d) {
+    var box = document.getElementById('pt-err'); if (!box) return;
+    document.getElementById('pt-err-h').textContent = h; document.getElementById('pt-err-p').textContent = p;
+    var pre = document.getElementById('pt-err-d'); if (d) { pre.hidden = false; pre.textContent = d; }
+    box.style.display = 'flex';
+  }
+  window.PNC_PLAY = { show: show, errors: [] };
+  window.addEventListener('error', function (e) {
+    var m = (e.message || 'Script error') + (e.filename ? ' (' + String(e.filename).split('/').pop() + ':' + e.lineno + ')' : '');
+    window.PNC_PLAY.errors.push(m);
+    if (!(window.PNC_DEBUG && window.PNC_DEBUG.ready)) show('The game couldn’t start', 'Something went wrong while loading. Tap Try again, or go back to the Studio.', m);
+  });
+  window.addEventListener('unhandledrejection', function (e) { window.PNC_PLAY.errors.push(String(e.reason && e.reason.message || e.reason)); });
+  var raw = null, from = '';
+  try { raw = sessionStorage.getItem('pnc.studio.play'); from = 'session'; } catch (e) {}
+  if (!raw) { try { raw = localStorage.getItem('pnc.studio.published'); from = 'local'; } catch (e) {} }
+  if (!raw) { show('Nothing to play yet', 'Open the Studio first. It saves your game on this device, then Play opens it here.'); window.PNC_EMBEDDED_GAME = { __missing: true }; return; }
+  try {
+    var project = JSON.parse(raw), g = project.game;
+    if (!g || !g.rooms || !g.meta) throw new Error('The saved game is incomplete.');
+    g.__assets = PNCPaths.assetMap(g, project);
+    window.PNC_EMBEDDED_GAME = g; window.PNC_PLAY.from = from; window.PNC_PLAY.title = g.meta.title;
+    document.title = g.meta.title + ' · Play';
+  } catch (e) {
+    show('The saved game couldn’t be read', 'Go back to the Studio and tap Play again.', String(e.message || e)); window.PNC_EMBEDDED_GAME = { __missing: true };
+  }
+  // watchdog: if the engine has not drawn its Start screen after 12 s, say so (instead of a blank screen)
+  setTimeout(function () {
+    if (window.PNC_DEBUG && window.PNC_DEBUG.ready) return;
+    var errs = (window.PNC_DEBUG && window.PNC_DEBUG.errors || []).concat(window.PNC_PLAY.errors);
+    show('Still loading…', 'The game is taking unusually long to start. Check your connection, then tap Try again.', errs.join('\n'));
+  }, 12000);
+})();
+</script>
+<script>
+  // Tiny boot guard: report any script error on screen (there is no dev console on a phone).
+  window.addEventListener('error', function (e) {
+    var el = document.getElementById('boot-error');
+    if (el) el.textContent = 'Error: ' + (e.message || e) + (e.lineno ? ' (line ' + e.lineno + ')' : '');
+  });
+  document.getElementById('boot-msg').style.display = 'none';
+</script>
+<script src="engine/core.js"></script>
+<script src="engine/nav.js"></script>
+<script src="engine/audio.js"></script>
+<script src="engine/engine.js"></script>
+</body>
+</html>

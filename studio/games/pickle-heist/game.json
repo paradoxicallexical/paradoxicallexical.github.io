@@ -1,0 +1,2718 @@
+{
+  "schema_version": "0.1",
+  "meta": {
+    "id": "pickle-heist",
+    "title": "The Great Pickle Heist",
+    "subtitle": "A Rocco Raccoon Mystery",
+    "resolution": [
+      1024,
+      576
+    ],
+    "start_room": "street",
+    "player": {
+      "character": "rocco",
+      "at": [
+        790,
+        500
+      ]
+    },
+    "intro": [
+      {
+        "by": "rocco",
+        "say": "Brineville. A town that runs on pickles... and tonight, somebody stole its heart."
+      },
+      {
+        "by": "rocco",
+        "say": "Better talk to the Mayor before she honks herself into orbit."
+      }
+    ]
+  },
+  "style_guide": {
+    "prompt": "Hand-painted 1990s cartoon point-and-click adventure game art, bold dark outlines, saturated warm palette, painterly gouache textures, slightly exaggerated wonky perspective.",
+    "background_rules": "16:9, no characters, lower third open floor for walking, no text except signage.",
+    "character_rules": "Full body, 3/4 view, flat pure magenta (#FF00FF) background for chroma key; portraits cropped from the same render.",
+    "style_anchor": "assets/bg_diner.jpg"
+  },
+  "verbs": {
+    "order": [
+      "walk",
+      "look",
+      "pickup",
+      "use",
+      "talk"
+    ],
+    "labels": {
+      "walk": "Walk to",
+      "look": "Look at",
+      "pickup": "Pick up",
+      "use": "Use",
+      "talk": "Talk to"
+    },
+    "defaults": {
+      "look": "Nothing special about it.",
+      "pickup": "I can't pick that up.",
+      "use": "That doesn't do anything.",
+      "talk": "It's not much of a conversationalist.",
+      "use_item": "That won't work."
+    }
+  },
+  "flags": {
+    "case_open": false,
+    "found_quarter": false,
+    "gus_distracted": false,
+    "took_key": false,
+    "door_unlocked": false,
+    "took_saltines": false,
+    "parrot_fed": false,
+    "basement_lit": false,
+    "found_trophy": false,
+    "trophy_returned": false,
+    "knows_grudge": false,
+    "knows_polka": false
+  },
+  "items": {
+    "quarter": {
+      "name": "quarter",
+      "icon": "\ud83e\ude99",
+      "look": "One shiny quarter. Smells faintly of booth."
+    },
+    "saltines": {
+      "name": "saltines",
+      "icon": "\ud83c\udf58",
+      "look": "A sleeve of saltines. Dry as the Mayor's sense of humor."
+    },
+    "badge": {
+      "name": "badge",
+      "icon": "\u2b50",
+      "look": "A temporary detective badge. It's a sticker. It says 'HELLO MY NAME IS: DETECTIVE'."
+    },
+    "key": {
+      "name": "basement key",
+      "icon": "\ud83d\udddd\ufe0f",
+      "look": "A brass key. The tag reads 'BASEMENT - GUS ONLY - THIS MEANS YOU'."
+    },
+    "flashlight": {
+      "name": "flashlight",
+      "icon": "\ud83d\udd26",
+      "look": "A little flashlight, slightly chewed. Still works."
+    },
+    "trophy": {
+      "name": "Golden Pickle",
+      "icon": "\ud83c\udfc6",
+      "image": "assets/icon_trophy.png",
+      "look": "The Golden Pickle Trophy! Dripping with brine and civic pride."
+    }
+  },
+  "characters": {
+    "rocco": {
+      "name": "Rocco",
+      "sprite": "assets/sprite_rocco.png",
+      "portrait": "assets/portrait_rocco.png",
+      "faces": "right",
+      "color": "#f5d76e",
+      "voice": {
+        "notes": "Gravelly mid-pitch noir narrator, dry deadpan delivery",
+        "pitch": 0.8,
+        "rate": 1.0
+      },
+      "idle": {
+        "breathe": 0.01,
+        "period": 3.0,
+        "face_player": false
+      }
+    },
+    "gus": {
+      "name": "Gus",
+      "sprite": "assets/sprite_gus.png",
+      "portrait": "assets/portrait_gus.png",
+      "faces": "left",
+      "color": "#ff9b6a",
+      "voice": {
+        "notes": "Deep, slow, gruff walrus; wet mustache consonants",
+        "pitch": 0.3,
+        "rate": 0.85
+      },
+      "actions": {
+        "look": [
+          {
+            "if": {
+              "flags": {
+                "gus_distracted": true
+              }
+            },
+            "do": [
+              {
+                "say": "He's polka-ing like nobody's watching. Everybody's watching."
+              }
+            ]
+          },
+          {
+            "do": [
+              {
+                "say": "Gus the cook. Walrus. Grump. Standing awfully close to that basement key."
+              }
+            ]
+          }
+        ],
+        "talk": [
+          {
+            "if": {
+              "flags": {
+                "gus_distracted": true
+              }
+            },
+            "do": [
+              {
+                "by": "gus",
+                "say": "Can't talk! Feet! Polka! OOM-PAH!"
+              }
+            ]
+          },
+          {
+            "if": {
+              "flags": {
+                "case_open": false
+              }
+            },
+            "do": [
+              {
+                "by": "gus",
+                "say": "Kitchen's closed, bandit. Unless you got a badge, scram."
+              }
+            ]
+          },
+          {
+            "do": [
+              {
+                "dialogue": "gus_talk"
+              }
+            ]
+          }
+        ],
+        "pickup": [
+          {
+            "do": [
+              {
+                "say": "He weighs about as much as a pickup truck."
+              }
+            ]
+          }
+        ],
+        "use_item": {
+          "badge": [
+            {
+              "do": [
+                {
+                  "dialogue": "gus_talk"
+                }
+              ]
+            }
+          ],
+          "saltines": [
+            {
+              "do": [
+                {
+                  "by": "gus",
+                  "say": "I MAKE the crackers around here, pal."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idle": {
+        "breathe": 0.014,
+        "period": 3.8,
+        "actions": [
+          {
+            "type": "wipe",
+            "every": [
+              4,
+              8
+            ],
+            "dur": 2.4
+          },
+          {
+            "type": "shift",
+            "every": [
+              5,
+              10
+            ],
+            "dur": 1.6
+          }
+        ]
+      }
+    },
+    "marge": {
+      "name": "Mayor Marge",
+      "sprite": "assets/sprite_marge.png",
+      "portrait": "assets/portrait_marge.png",
+      "faces": "left",
+      "color": "#e7a6ff",
+      "voice": {
+        "notes": "High, fast, operatic, perpetually on the verge of a honk",
+        "pitch": 1.6,
+        "rate": 1.2
+      },
+      "actions": {
+        "look": [
+          {
+            "do": [
+              {
+                "say": "Mayor Marge. A goose in crisis. Which is every goose, but more so."
+              }
+            ]
+          }
+        ],
+        "talk": [
+          {
+            "do": [
+              {
+                "dialogue": "marge_talk"
+              }
+            ]
+          }
+        ],
+        "pickup": [
+          {
+            "do": [
+              {
+                "say": "Grabbing the Mayor is how you end up on a wanted poster."
+              }
+            ]
+          }
+        ],
+        "use_item": {
+          "trophy": [
+            {
+              "do": [
+                {
+                  "set": {
+                    "trophy_returned": true
+                  }
+                },
+                {
+                  "take": "trophy"
+                },
+                {
+                  "sfx": "fanfare"
+                },
+                {
+                  "by": "marge",
+                  "say": "MY PICKLE! You found it! Put it right back on the pedestal where it belongs!"
+                },
+                {
+                  "say": "And arrest Gus. He hid it in his own pickle barrel."
+                },
+                {
+                  "by": "marge",
+                  "say": "Sore loser! Brineville is SAVED!"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idle": {
+        "breathe": 0.012,
+        "period": 3.0,
+        "actions": [
+          {
+            "type": "look",
+            "every": [
+              3,
+              7
+            ],
+            "dur": 2.2
+          },
+          {
+            "type": "ruffle",
+            "every": [
+              5,
+              10
+            ],
+            "dur": 0.9
+          }
+        ]
+      }
+    },
+    "captain": {
+      "name": "Captain Squawks",
+      "sprite": "assets/sprite_captain.png",
+      "portrait": "assets/portrait_captain.png",
+      "faces": "left",
+      "color": "#8dff7a",
+      "voice": {
+        "notes": "Shrill pirate squawk, very fast",
+        "pitch": 2.0,
+        "rate": 1.4
+      },
+      "actions": {
+        "look": [
+          {
+            "if": {
+              "flags": {
+                "parrot_fed": true
+              }
+            },
+            "do": [
+              {
+                "say": "Captain Squawks, crunching saltines in his nest of stolen shiny junk."
+              }
+            ]
+          },
+          {
+            "do": [
+              {
+                "say": "A pirate parrot with a nest full of shiny stolen junk. Is that a flashlight he's hugging?"
+              }
+            ]
+          }
+        ],
+        "talk": [
+          {
+            "if": {
+              "flags": {
+                "parrot_fed": true
+              }
+            },
+            "do": [
+              {
+                "by": "captain",
+                "say": "CRUNCH! Pleasure doin' business! SQUAWK!"
+              }
+            ]
+          },
+          {
+            "do": [
+              {
+                "by": "captain",
+                "say": "SQUAWK! No shinies for free! CRACKERS! Crackers or NOTHIN'!"
+              }
+            ]
+          }
+        ],
+        "pickup": [
+          {
+            "do": [
+              {
+                "say": "He's way up on that lamppost. Also, he bites."
+              }
+            ]
+          }
+        ],
+        "use_item": {
+          "saltines": [
+            {
+              "do": [
+                {
+                  "take": "saltines"
+                },
+                {
+                  "give": "flashlight"
+                },
+                {
+                  "set": {
+                    "parrot_fed": true
+                  }
+                },
+                {
+                  "sfx": "squawk"
+                },
+                {
+                  "by": "captain",
+                  "say": "CRACKERS! Arr, a fair trade! Take this shiny stick!"
+                },
+                {
+                  "say": "He drops a little flashlight. It's only slightly chewed."
+                }
+              ]
+            }
+          ],
+          "quarter": [
+            {
+              "do": [
+                {
+                  "by": "captain",
+                  "say": "Shiny, but not CRUNCHY! SQUAWK!"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "idle": {
+        "breathe": 0.02,
+        "period": 1.6,
+        "face_radius": 320,
+        "actions": [
+          {
+            "type": "bob",
+            "every": [
+              2,
+              5
+            ],
+            "dur": 1.2
+          },
+          {
+            "type": "hop",
+            "every": [
+              4,
+              9
+            ],
+            "dur": 0.9
+          },
+          {
+            "type": "flap",
+            "every": [
+              5,
+              10
+            ],
+            "dur": 1.0
+          }
+        ]
+      }
+    }
+  },
+  "music": {
+    "street_bounce": {
+      "tempo": 116,
+      "root": 261.6,
+      "mode": "major",
+      "style": "bounce",
+      "seed": 3
+    },
+    "diner_swing": {
+      "tempo": 96,
+      "root": 220.0,
+      "mode": "dorian",
+      "style": "swing",
+      "seed": 7
+    },
+    "basement_drone": {
+      "tempo": 70,
+      "root": 110.0,
+      "mode": "minor",
+      "style": "drone",
+      "seed": 11
+    },
+    "polka": {
+      "tempo": 150,
+      "root": 293.7,
+      "mode": "major",
+      "style": "polka",
+      "seed": 5
+    }
+  },
+  "rooms": {
+    "street": {
+      "name": "Main Street",
+      "background": "assets/bg_street.jpg",
+      "layers": [
+        {
+          "id": "well",
+          "mask": "assets/layers/street_well.png",
+          "rect": [
+            443,
+            344,
+            147,
+            157
+          ],
+          "baseline_y": 488
+        },
+        {
+          "id": "lamppost",
+          "mask": "assets/layers/street_lamppost.png",
+          "rect": [
+            684,
+            172,
+            67,
+            284
+          ],
+          "baseline_y": 446
+        },
+        {
+          "id": "news_box",
+          "mask": "assets/layers/street_news_box.png",
+          "rect": [
+            831,
+            311,
+            146,
+            243
+          ],
+          "baseline_y": 528
+        }
+      ],
+      "music": [
+        {
+          "track": "street_bounce"
+        }
+      ],
+      "props": [
+        {
+          "image": "assets/prop_trophy.png",
+          "at": [
+            495,
+            268
+          ],
+          "baseline_y": 489,
+          "if": {
+            "flags": {
+              "trophy_returned": true
+            }
+          }
+        }
+      ],
+      "walkable": [
+        [
+          0,
+          432
+        ],
+        [
+          150,
+          420
+        ],
+        [
+          420,
+          388
+        ],
+        [
+          700,
+          396
+        ],
+        [
+          840,
+          420
+        ],
+        [
+          1024,
+          470
+        ],
+        [
+          1024,
+          576
+        ],
+        [
+          0,
+          576
+        ]
+      ],
+      "walkable_holes": [
+        [
+          [
+            666,
+            491
+          ],
+          [
+            658,
+            507
+          ],
+          [
+            636,
+            522
+          ],
+          [
+            602,
+            533
+          ],
+          [
+            558,
+            540
+          ],
+          [
+            510,
+            543
+          ],
+          [
+            462,
+            540
+          ],
+          [
+            418,
+            533
+          ],
+          [
+            384,
+            522
+          ],
+          [
+            362,
+            507
+          ],
+          [
+            354,
+            491
+          ],
+          [
+            362,
+            475
+          ],
+          [
+            384,
+            460
+          ],
+          [
+            418,
+            449
+          ],
+          [
+            462,
+            442
+          ],
+          [
+            510,
+            439
+          ],
+          [
+            558,
+            442
+          ],
+          [
+            602,
+            449
+          ],
+          [
+            636,
+            460
+          ],
+          [
+            658,
+            475
+          ]
+        ],
+        [
+          [
+            680,
+            436
+          ],
+          [
+            752,
+            436
+          ],
+          [
+            758,
+            446
+          ],
+          [
+            752,
+            458
+          ],
+          [
+            680,
+            458
+          ],
+          [
+            674,
+            446
+          ]
+        ],
+        [
+          [
+            824,
+            536
+          ],
+          [
+            832,
+            512
+          ],
+          [
+            880,
+            506
+          ],
+          [
+            984,
+            522
+          ],
+          [
+            982,
+            536
+          ],
+          [
+            932,
+            557
+          ],
+          [
+            826,
+            542
+          ]
+        ]
+      ],
+      "depth": {
+        "far_y": 388,
+        "far_scale": 0.42,
+        "near_y": 576,
+        "near_scale": 0.74
+      },
+      "actors": [
+        {
+          "character": "marge",
+          "at": [
+            285,
+            478
+          ],
+          "flip": true,
+          "walk_to": [
+            372,
+            524
+          ]
+        },
+        {
+          "character": "captain",
+          "at": [
+            708,
+            92
+          ],
+          "scale": 0.5,
+          "shadow": false,
+          "walk_to": [
+            655,
+            446
+          ]
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "diner_door",
+          "name": "Diner door",
+          "polygon": [
+            [
+              55,
+              190
+            ],
+            [
+              148,
+              190
+            ],
+            [
+              148,
+              415
+            ],
+            [
+              55,
+              415
+            ]
+          ],
+          "walk_to": [
+            105,
+            445
+          ],
+          "exit": {
+            "to": "diner",
+            "at": [
+              930,
+              528
+            ]
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "Brineville Diner. Home of the 3-pickle breakfast."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "pedestal",
+          "name": "Trophy pedestal",
+          "polygon": [
+            [
+              452,
+              350
+            ],
+            [
+              578,
+              350
+            ],
+            [
+              585,
+              452
+            ],
+            [
+              640,
+              470
+            ],
+            [
+              650,
+              505
+            ],
+            [
+              560,
+              535
+            ],
+            [
+              460,
+              535
+            ],
+            [
+              370,
+              505
+            ],
+            [
+              385,
+              465
+            ],
+            [
+              445,
+              452
+            ]
+          ],
+          "walk_to": [
+            420,
+            548
+          ],
+          "actions": {
+            "look": [
+              {
+                "if": {
+                  "flags": {
+                    "trophy_returned": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "The Golden Pickle, back where it belongs."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "An empty pedestal. The plaque reads: 'GOLDEN PICKLE TROPHY. DO NOT LICK.'"
+                  }
+                ]
+              }
+            ],
+            "use_item": {
+              "trophy": [
+                {
+                  "do": [
+                    {
+                      "take": "trophy"
+                    },
+                    {
+                      "set": {
+                        "trophy_returned": true
+                      }
+                    },
+                    {
+                      "sfx": "fanfare"
+                    },
+                    {
+                      "say": "The Golden Pickle returns to its rightful throne."
+                    },
+                    {
+                      "by": "marge",
+                      "say": "MY PICKLE! Detective, you're a hero! But who took it?!"
+                    },
+                    {
+                      "say": "Gus. Hid it in his own pickle barrel. Sore loser from last year's contest."
+                    },
+                    {
+                      "by": "marge",
+                      "say": "I KNEW IT! Brineville is SAVED! Someone fetch a polka band... for his trial!"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "news_box",
+          "name": "Newspaper box",
+          "polygon": [
+            [
+              866,
+              312
+            ],
+            [
+              934,
+              312
+            ],
+            [
+              934,
+              355
+            ],
+            [
+              972,
+              362
+            ],
+            [
+              975,
+              548
+            ],
+            [
+              835,
+              548
+            ],
+            [
+              835,
+              358
+            ],
+            [
+              866,
+              355
+            ]
+          ],
+          "walk_to": [
+            800,
+            545
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "Today's headline: 'PICKLE PILFERED! TOWN IN A PICKLE!' Journalism is dead."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "do": [
+                  {
+                    "say": "It wants a quarter for a paper whose headline I can already read."
+                  }
+                ]
+              }
+            ],
+            "use_item": {
+              "quarter": [
+                {
+                  "do": [
+                    {
+                      "say": "Nah. I'm not wasting my only quarter on a paper I can read through the glass."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "lamppost",
+          "name": "Lamppost",
+          "polygon": [
+            [
+              690,
+              95
+            ],
+            [
+              740,
+              95
+            ],
+            [
+              735,
+              455
+            ],
+            [
+              690,
+              455
+            ]
+          ],
+          "walk_to": [
+            655,
+            446
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A lamppost with a parrot nest on top. Brineville's finest urban planning."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "do": [
+                  {
+                    "say": "I'd shimmy up, but this coat is dry-clean only."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "diner": {
+      "name": "Brineville Diner",
+      "background": "assets/bg_diner.jpg",
+      "layers": [
+        {
+          "id": "counter_stools",
+          "mask": "assets/layers/diner_counter_stools.png",
+          "rect": [
+            211,
+            287,
+            358,
+            133
+          ],
+          "baseline_y": 408
+        },
+        {
+          "id": "table",
+          "mask": "assets/layers/diner_table.png",
+          "rect": [
+            56,
+            310,
+            286,
+            210
+          ],
+          "baseline_y": 470
+        },
+        {
+          "id": "jukebox",
+          "mask": "assets/layers/diner_jukebox.png",
+          "rect": [
+            709,
+            185,
+            196,
+            294
+          ],
+          "baseline_y": 470
+        }
+      ],
+      "music": [
+        {
+          "if": {
+            "flags": {
+              "gus_distracted": true
+            }
+          },
+          "track": "polka"
+        },
+        {
+          "track": "diner_swing"
+        }
+      ],
+      "walkable": [
+        [
+          262,
+          412
+        ],
+        [
+          326,
+          410
+        ],
+        [
+          330,
+          413
+        ],
+        [
+          370,
+          413
+        ],
+        [
+          374,
+          398
+        ],
+        [
+          410,
+          398
+        ],
+        [
+          412,
+          418
+        ],
+        [
+          468,
+          418
+        ],
+        [
+          470,
+          398
+        ],
+        [
+          506,
+          398
+        ],
+        [
+          508,
+          420
+        ],
+        [
+          566,
+          420
+        ],
+        [
+          568,
+          398
+        ],
+        [
+          600,
+          398
+        ],
+        [
+          612,
+          394
+        ],
+        [
+          640,
+          376
+        ],
+        [
+          704,
+          376
+        ],
+        [
+          704,
+          442
+        ],
+        [
+          720,
+          455
+        ],
+        [
+          830,
+          480
+        ],
+        [
+          880,
+          484
+        ],
+        [
+          905,
+          472
+        ],
+        [
+          1024,
+          560
+        ],
+        [
+          1024,
+          576
+        ],
+        [
+          0,
+          576
+        ],
+        [
+          0,
+          540
+        ],
+        [
+          60,
+          527
+        ],
+        [
+          250,
+          549
+        ],
+        [
+          352,
+          474
+        ],
+        [
+          262,
+          446
+        ]
+      ],
+      "depth": {
+        "far_y": 370,
+        "far_scale": 0.42,
+        "near_y": 576,
+        "near_scale": 0.72
+      },
+      "props": [
+        {
+          "image": "assets/prop_key_patch.png",
+          "at": [
+            578,
+            150
+          ],
+          "if": {
+            "flags": {
+              "took_key": true
+            }
+          }
+        }
+      ],
+      "actors": [
+        {
+          "character": "gus",
+          "at": [
+            655,
+            412
+          ],
+          "walk_to": [
+            588,
+            428
+          ],
+          "if": {
+            "flags": {
+              "gus_distracted": false
+            }
+          }
+        },
+        {
+          "character": "gus",
+          "at": [
+            395,
+            482
+          ],
+          "anim": "dance",
+          "walk_to": [
+            480,
+            505
+          ],
+          "if": {
+            "flags": {
+              "gus_distracted": true
+            }
+          }
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "front_door",
+          "name": "Front door",
+          "polygon": [
+            [
+              912,
+              40
+            ],
+            [
+              1024,
+              20
+            ],
+            [
+              1024,
+              500
+            ],
+            [
+              912,
+              470
+            ]
+          ],
+          "walk_to": [
+            950,
+            526
+          ],
+          "exit": {
+            "to": "street",
+            "at": [
+              110,
+              450
+            ]
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "The way out to Main Street."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "basement_door",
+          "name": "Basement door",
+          "polygon": [
+            [
+              645,
+              98
+            ],
+            [
+              762,
+              98
+            ],
+            [
+              762,
+              362
+            ],
+            [
+              645,
+              362
+            ]
+          ],
+          "walk_to": [
+            700,
+            392
+          ],
+          "exit": {
+            "to": "basement",
+            "at": [
+              205,
+              430
+            ],
+            "if": {
+              "flags": {
+                "door_unlocked": true
+              }
+            },
+            "else": [
+              {
+                "if": {
+                  "flags": {
+                    "gus_distracted": false
+                  }
+                },
+                "do": [
+                  {
+                    "by": "gus",
+                    "say": "Basement's off limits, ringtail. Gus only."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "Locked. Of course it's locked."
+                  }
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "look": [
+              {
+                "if": {
+                  "flags": {
+                    "door_unlocked": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "The basement door, unlocked. Smells like brine and guilt."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "A door to the basement, with a big red arrow pointing down. Subtle."
+                  }
+                ]
+              }
+            ],
+            "use_item": {
+              "key": [
+                {
+                  "do": [
+                    {
+                      "take": "key"
+                    },
+                    {
+                      "set": {
+                        "door_unlocked": true
+                      }
+                    },
+                    {
+                      "sfx": "door"
+                    },
+                    {
+                      "say": "Click. The basement door is unlocked."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "key_hook",
+          "name": "Key on hook",
+          "polygon": [
+            [
+              578,
+              132
+            ],
+            [
+              612,
+              132
+            ],
+            [
+              612,
+              204
+            ],
+            [
+              578,
+              204
+            ]
+          ],
+          "walk_to": [
+            590,
+            410
+          ],
+          "if": {
+            "flags": {
+              "took_key": false
+            }
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A brass key on a hook, right next to the basement door. Convenient for Gus. And me."
+                  }
+                ]
+              }
+            ],
+            "pickup": [
+              {
+                "if": {
+                  "flags": {
+                    "gus_distracted": false
+                  }
+                },
+                "do": [
+                  {
+                    "by": "gus",
+                    "say": "Paws off the key, bandit, or you're the soup of the day."
+                  }
+                ]
+              },
+              {
+                "if": {
+                  "flags": {
+                    "case_open": false
+                  }
+                },
+                "do": [
+                  {
+                    "say": "Swiping keys without an official case? That's just burglary. I need the Mayor to hire me first."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "give": "key"
+                  },
+                  {
+                    "set": {
+                      "took_key": true
+                    }
+                  },
+                  {
+                    "sfx": "pickup"
+                  },
+                  {
+                    "say": "Official detective business. Totally legal. Probably."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "saltines",
+          "name": "Box of saltines",
+          "polygon": [
+            [
+              282,
+              198
+            ],
+            [
+              352,
+              198
+            ],
+            [
+              352,
+              252
+            ],
+            [
+              282,
+              252
+            ]
+          ],
+          "walk_to": [
+            300,
+            428
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A family-size box of saltines. Brineville's second favorite food."
+                  }
+                ]
+              }
+            ],
+            "pickup": [
+              {
+                "if": {
+                  "flags": {
+                    "took_saltines": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "I've got plenty. Any more and I'll turn into a cracker."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "give": "saltines"
+                  },
+                  {
+                    "set": {
+                      "took_saltines": true
+                    }
+                  },
+                  {
+                    "sfx": "pickup"
+                  },
+                  {
+                    "say": "I'll take a sleeve. For evidence."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "cushion",
+          "name": "Booth cushion",
+          "polygon": [
+            [
+              0,
+              382
+            ],
+            [
+              170,
+              376
+            ],
+            [
+              245,
+              396
+            ],
+            [
+              240,
+              470
+            ],
+            [
+              60,
+              522
+            ],
+            [
+              0,
+              526
+            ]
+          ],
+          "walk_to": [
+            120,
+            556
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A squishy red booth cushion. Things fall in there and are never seen again."
+                  }
+                ]
+              }
+            ],
+            "pickup": [
+              {
+                "if": {
+                  "flags": {
+                    "found_quarter": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "Just crumbs and regret left in there."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "give": "quarter"
+                  },
+                  {
+                    "set": {
+                      "found_quarter": true
+                    }
+                  },
+                  {
+                    "sfx": "coin"
+                  },
+                  {
+                    "say": "Aha! Buried treasure: one quarter, two fries, and a button."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "do": [
+                  {
+                    "say": "I could sit, but crime never sleeps. Or sits."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "jukebox",
+          "name": "Jukebox",
+          "polygon": [
+            [
+              714,
+              240
+            ],
+            [
+              740,
+              195
+            ],
+            [
+              800,
+              180
+            ],
+            [
+              870,
+              195
+            ],
+            [
+              900,
+              240
+            ],
+            [
+              902,
+              478
+            ],
+            [
+              712,
+              470
+            ]
+          ],
+          "walk_to": [
+            800,
+            500
+          ],
+          "actions": {
+            "look": [
+              {
+                "if": {
+                  "flags": {
+                    "gus_distracted": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "'Dill With It (Polka Remix)'. On repeat. Forever."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "A jukebox. Every record is scratched except one: 'Dill With It (Polka Remix)'. Takes quarters."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "if": {
+                  "flags": {
+                    "gus_distracted": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "It's already playing. Gus might never stop."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "It needs a quarter."
+                  }
+                ]
+              }
+            ],
+            "use_item": {
+              "quarter": [
+                {
+                  "do": [
+                    {
+                      "take": "quarter"
+                    },
+                    {
+                      "set": {
+                        "gus_distracted": true
+                      }
+                    },
+                    {
+                      "sfx": "jukebox"
+                    },
+                    {
+                      "say": "One quarter, one polka."
+                    },
+                    {
+                      "by": "gus",
+                      "say": "Is that... 'Dill With It'?! My flippers! They won't stop! OOM-PAH-PAH!"
+                    },
+                    {
+                      "say": "And just like that, the key's unguarded."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "kitchen_window",
+          "name": "Kitchen window",
+          "polygon": [
+            [
+              325,
+              118
+            ],
+            [
+              530,
+              118
+            ],
+            [
+              530,
+              245
+            ],
+            [
+              325,
+              245
+            ]
+          ],
+          "walk_to": [
+            488,
+            402
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "The kitchen. Grease, pots, and a sign: 'EMPLOYEE OF THE MONTH: GUS (ONLY EMPLOYEE)'."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "painting",
+          "name": "Painting",
+          "polygon": [
+            [
+              30,
+              38
+            ],
+            [
+              138,
+              48
+            ],
+            [
+              136,
+              172
+            ],
+            [
+              30,
+              165
+            ]
+          ],
+          "walk_to": [
+            200,
+            560
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A painting of Brineville back when it was Cucumberton. Dark times."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "ambient": [
+        {
+          "type": "steam",
+          "at": [
+            425,
+            205
+          ],
+          "width": 60,
+          "rise": 60
+        },
+        {
+          "type": "glow",
+          "at": [
+            200,
+            132
+          ],
+          "radius": 55,
+          "color": "rgba(255,220,140,A)",
+          "alpha": 0.35,
+          "speed": 1.7
+        },
+        {
+          "type": "glow",
+          "at": [
+            788,
+            245
+          ],
+          "radius": 70,
+          "color": "rgba(255,190,90,A)",
+          "alpha": 0.3,
+          "speed": 3.1
+        },
+        {
+          "type": "flicker",
+          "at": [
+            810,
+            115
+          ],
+          "radius": 50,
+          "color": "rgba(255,70,50,A)",
+          "alpha": 0.4
+        }
+      ]
+    },
+    "basement": {
+      "name": "Basement",
+      "background": "assets/bg_basement.jpg",
+      "layers": [
+        {
+          "id": "stair_rail",
+          "mask": "assets/layers/basement_stair_rail.png",
+          "rect": [
+            222,
+            128,
+            89,
+            281
+          ],
+          "baseline_y": 408
+        },
+        {
+          "id": "small_barrel",
+          "mask": "assets/layers/basement_small_barrel.png",
+          "rect": [
+            302,
+            316,
+            54,
+            70
+          ],
+          "baseline_y": 382
+        },
+        {
+          "id": "pickle_barrel",
+          "mask": "assets/layers/basement_pickle_barrel.png",
+          "rect": [
+            383,
+            122,
+            326,
+            282
+          ],
+          "baseline_y": 400
+        }
+      ],
+      "music": [
+        {
+          "track": "basement_drone"
+        }
+      ],
+      "walkable": [
+        [
+          0,
+          440
+        ],
+        [
+          100,
+          412
+        ],
+        [
+          284,
+          412
+        ],
+        [
+          288,
+          418
+        ],
+        [
+          308,
+          418
+        ],
+        [
+          312,
+          392
+        ],
+        [
+          384,
+          392
+        ],
+        [
+          392,
+          404
+        ],
+        [
+          545,
+          408
+        ],
+        [
+          696,
+          402
+        ],
+        [
+          704,
+          390
+        ],
+        [
+          770,
+          390
+        ],
+        [
+          1024,
+          458
+        ],
+        [
+          1024,
+          576
+        ],
+        [
+          0,
+          576
+        ]
+      ],
+      "depth": {
+        "far_y": 396,
+        "far_scale": 0.5,
+        "near_y": 576,
+        "near_scale": 0.8
+      },
+      "darkness": {
+        "if": {
+          "flags": {
+            "basement_lit": false
+          }
+        },
+        "alpha": 0.9,
+        "glow": [
+          545,
+          180,
+          120
+        ]
+      },
+      "hotspots": [
+        {
+          "id": "stairs",
+          "name": "Stairs up",
+          "polygon": [
+            [
+              100,
+              402
+            ],
+            [
+              100,
+              225
+            ],
+            [
+              135,
+              225
+            ],
+            [
+              135,
+              15
+            ],
+            [
+              206,
+              15
+            ],
+            [
+              210,
+              225
+            ],
+            [
+              300,
+              282
+            ],
+            [
+              300,
+              402
+            ]
+          ],
+          "walk_to": [
+            205,
+            430
+          ],
+          "exit": {
+            "to": "diner",
+            "at": [
+              700,
+              396
+            ]
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "Stairs back up to the diner."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "darkness",
+          "name": "Darkness",
+          "polygon": [
+            [
+              310,
+              0
+            ],
+            [
+              1024,
+              0
+            ],
+            [
+              1024,
+              452
+            ],
+            [
+              780,
+              420
+            ],
+            [
+              700,
+              396
+            ],
+            [
+              310,
+              396
+            ]
+          ],
+          "walk_to": [
+            450,
+            470
+          ],
+          "if": {
+            "flags": {
+              "basement_lit": false
+            }
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "Pitch black. Something big in the middle is glowing faintly... green."
+                  }
+                ]
+              }
+            ],
+            "use_item": {
+              "flashlight": [
+                {
+                  "do": [
+                    {
+                      "set": {
+                        "basement_lit": true
+                      }
+                    },
+                    {
+                      "sfx": "click"
+                    },
+                    {
+                      "say": "Click. Let there be light. And pickles. So many pickles."
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "barrel",
+          "name": "Giant pickle barrel",
+          "polygon": [
+            [
+              385,
+              210
+            ],
+            [
+              410,
+              150
+            ],
+            [
+              545,
+              125
+            ],
+            [
+              690,
+              150
+            ],
+            [
+              700,
+              210
+            ],
+            [
+              700,
+              330
+            ],
+            [
+              680,
+              400
+            ],
+            [
+              400,
+              400
+            ],
+            [
+              388,
+              330
+            ]
+          ],
+          "walk_to": [
+            545,
+            430
+          ],
+          "if": {
+            "flags": {
+              "basement_lit": true
+            }
+          },
+          "actions": {
+            "look": [
+              {
+                "if": {
+                  "flags": {
+                    "found_trophy": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "Just pickles now. Regular, non-golden pickles."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "say": "A giant pickle barrel. The lid's ajar, and something down there is glowing GOLD-ish green."
+                  }
+                ]
+              }
+            ],
+            "pickup": [
+              {
+                "if": {
+                  "flags": {
+                    "found_trophy": true
+                  }
+                },
+                "do": [
+                  {
+                    "say": "I'm not fishing in there again. My paws are already pruney."
+                  }
+                ]
+              },
+              {
+                "do": [
+                  {
+                    "give": "trophy"
+                  },
+                  {
+                    "set": {
+                      "found_trophy": true
+                    }
+                  },
+                  {
+                    "sfx": "splash"
+                  },
+                  {
+                    "say": "I fish around in the brine and... THE GOLDEN PICKLE TROPHY! Gus, you sour, sour walrus."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "do": [
+                  {
+                    "say": "I should reach in and pick up whatever's glowing in there."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "shelves",
+          "name": "Pickle shelves",
+          "polygon": [
+            [
+              770,
+              30
+            ],
+            [
+              1024,
+              10
+            ],
+            [
+              1024,
+              450
+            ],
+            [
+              775,
+              385
+            ]
+          ],
+          "walk_to": [
+            860,
+            470
+          ],
+          "if": {
+            "flags": {
+              "basement_lit": true
+            }
+          },
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "Jars labeled 'DILL', 'EXTRA DILL', and 'DILL WITH IT'. The man has a theme."
+                  }
+                ]
+              }
+            ],
+            "pickup": [
+              {
+                "do": [
+                  {
+                    "say": "I've got all the pickle I need. The golden kind."
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "bulb",
+          "name": "Light bulb",
+          "polygon": [
+            [
+              515,
+              15
+            ],
+            [
+              590,
+              15
+            ],
+            [
+              590,
+              68
+            ],
+            [
+              515,
+              68
+            ]
+          ],
+          "walk_to": [
+            550,
+            430
+          ],
+          "actions": {
+            "look": [
+              {
+                "do": [
+                  {
+                    "say": "A burnt-out bulb. Gus likes his crimes in the dark."
+                  }
+                ]
+              }
+            ],
+            "use": [
+              {
+                "do": [
+                  {
+                    "say": "Dead. Totally dead."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "dialogues": {
+    "marge_talk": {
+      "start": "root",
+      "nodes": {
+        "root": {
+          "lines": [
+            {
+              "by": "marge",
+              "say": "Detective! The Golden Pickle Trophy has been STOLEN! Our pride! Our identity! Our BRINE!"
+            }
+          ],
+          "choices": [
+            {
+              "text": "I'll take the case.",
+              "if": {
+                "flags": {
+                  "case_open": false
+                }
+              },
+              "next": "hired"
+            },
+            {
+              "text": "Any suspects?",
+              "next": "suspects"
+            },
+            {
+              "text": "What's with the parrot?",
+              "next": "parrot"
+            },
+            {
+              "text": "Goodbye.",
+              "next": null
+            }
+          ]
+        },
+        "hired": {
+          "lines": [
+            {
+              "by": "marge",
+              "say": "Splendid! Here's a temporary badge. Flash it and people will HAVE to talk to you."
+            },
+            {
+              "say": "It's a sticker. I'm honored."
+            }
+          ],
+          "do": [
+            {
+              "set": {
+                "case_open": true
+              }
+            },
+            {
+              "give": "badge"
+            },
+            {
+              "sfx": "pickup"
+            }
+          ],
+          "next": "root_again"
+        },
+        "suspects": {
+          "lines": [
+            {
+              "by": "marge",
+              "say": "Well... Gus the cook DID lose last year's pickle-eating contest to me. He's been sour ever since. And he hasn't left that diner all day!"
+            }
+          ],
+          "do": [
+            {
+              "set": {
+                "knows_grudge": true
+              }
+            }
+          ],
+          "next": "root_again"
+        },
+        "parrot": {
+          "lines": [
+            {
+              "by": "marge",
+              "say": "Captain Squawks? He steals anything shiny. Utter menace! Only thing he loves more than shinies is crackers."
+            }
+          ],
+          "next": "root_again"
+        },
+        "root_again": {
+          "lines": [
+            {
+              "by": "marge",
+              "say": "Anything else, Detective?"
+            }
+          ],
+          "choices": [
+            {
+              "text": "I'll take the case.",
+              "if": {
+                "flags": {
+                  "case_open": false
+                }
+              },
+              "next": "hired"
+            },
+            {
+              "text": "Any suspects?",
+              "next": "suspects"
+            },
+            {
+              "text": "What's with the parrot?",
+              "next": "parrot"
+            },
+            {
+              "text": "Goodbye.",
+              "next": null
+            }
+          ]
+        }
+      }
+    },
+    "gus_talk": {
+      "start": "root",
+      "nodes": {
+        "root": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "A badge, huh. Make it quick. I got hash browns burnin'."
+            }
+          ],
+          "choices": [
+            {
+              "text": "Where were you last night?",
+              "next": "alibi"
+            },
+            {
+              "text": "What's behind the basement door?",
+              "next": "basement"
+            },
+            {
+              "text": "You into music?",
+              "next": "music"
+            },
+            {
+              "text": "Nice mustache.",
+              "next": "stache"
+            },
+            {
+              "text": "Bye.",
+              "next": null
+            }
+          ]
+        },
+        "alibi": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "Here. Mopping. Alone. Not near any trophies. Why, what'd you hear?"
+            }
+          ],
+          "next": "more"
+        },
+        "basement": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "Pickles. Brine. Nothing shiny. Nothing trophy-shaped. Stop asking."
+            }
+          ],
+          "next": "more"
+        },
+        "music": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "Polka. Can't resist it. If that jukebox plays 'Dill With It', my flippers got a mind of their own."
+            }
+          ],
+          "do": [
+            {
+              "set": {
+                "knows_polka": true
+              }
+            }
+          ],
+          "next": "more"
+        },
+        "stache": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "Thanks. It's load-bearing."
+            }
+          ],
+          "next": "more"
+        },
+        "more": {
+          "lines": [
+            {
+              "by": "gus",
+              "say": "What else?"
+            }
+          ],
+          "choices": [
+            {
+              "text": "Where were you last night?",
+              "next": "alibi"
+            },
+            {
+              "text": "What's behind the basement door?",
+              "next": "basement"
+            },
+            {
+              "text": "You into music?",
+              "next": "music"
+            },
+            {
+              "text": "Nice mustache.",
+              "next": "stache"
+            },
+            {
+              "text": "Bye.",
+              "next": null
+            }
+          ]
+        }
+      }
+    }
+  },
+  "puzzles": [
+    {
+      "id": "take_case",
+      "name": "Get hired by the Mayor",
+      "requires": [],
+      "solved_when": {
+        "flags": {
+          "case_open": true
+        }
+      }
+    },
+    {
+      "id": "find_quarter",
+      "name": "Search the booth cushion",
+      "requires": [],
+      "solved_when": {
+        "flags": {
+          "found_quarter": true
+        }
+      }
+    },
+    {
+      "id": "distract_gus",
+      "name": "Polka on the jukebox distracts Gus",
+      "requires": [
+        "find_quarter"
+      ],
+      "solved_when": {
+        "flags": {
+          "gus_distracted": true
+        }
+      }
+    },
+    {
+      "id": "get_key",
+      "name": "Take the basement key",
+      "requires": [
+        "distract_gus",
+        "take_case"
+      ],
+      "solved_when": {
+        "flags": {
+          "took_key": true
+        }
+      }
+    },
+    {
+      "id": "unlock_basement",
+      "name": "Unlock the basement",
+      "requires": [
+        "get_key"
+      ],
+      "solved_when": {
+        "flags": {
+          "door_unlocked": true
+        }
+      }
+    },
+    {
+      "id": "get_saltines",
+      "name": "Take saltines",
+      "requires": [],
+      "solved_when": {
+        "flags": {
+          "took_saltines": true
+        }
+      }
+    },
+    {
+      "id": "feed_parrot",
+      "name": "Trade saltines to the parrot for a flashlight",
+      "requires": [
+        "get_saltines"
+      ],
+      "solved_when": {
+        "flags": {
+          "parrot_fed": true
+        }
+      }
+    },
+    {
+      "id": "light_basement",
+      "name": "Light up the basement",
+      "requires": [
+        "unlock_basement",
+        "feed_parrot"
+      ],
+      "solved_when": {
+        "flags": {
+          "basement_lit": true
+        }
+      }
+    },
+    {
+      "id": "find_trophy",
+      "name": "Fish the trophy out of the barrel",
+      "requires": [
+        "light_basement"
+      ],
+      "solved_when": {
+        "flags": {
+          "found_trophy": true
+        }
+      }
+    },
+    {
+      "id": "return_trophy",
+      "name": "Return the trophy",
+      "requires": [
+        "find_trophy"
+      ],
+      "solved_when": {
+        "flags": {
+          "trophy_returned": true
+        }
+      }
+    }
+  ],
+  "win": {
+    "if": {
+      "flags": {
+        "trophy_returned": true
+      }
+    },
+    "title": "CASE CLOSED",
+    "text": "The Golden Pickle is home, Gus is doing community service at the polka hall, and Rocco got paid in saltines. Brineville is saved."
+  }
+}

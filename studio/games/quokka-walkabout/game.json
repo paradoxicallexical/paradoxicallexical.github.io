@@ -1,0 +1,2383 @@
+{
+ "schema_version": "0.1",
+ "meta": {
+  "id": "quokka-walkabout",
+  "title": "Quokka Gone Walkabout",
+  "subtitle": "A Rottnest Island Misadventure",
+  "resolution": [
+   1024,
+   576
+  ],
+  "start_room": "landfill",
+  "player": {
+   "character": "quokka",
+   "at": [
+    150,
+    520
+   ]
+  },
+  "intro": [
+   {
+    "say": "Urrrgh... where am I? This doesn’t smell like Rottnest. It smells like a landfill.",
+    "by": "quokka"
+   },
+   {
+    "say": "Last thing I remember: a barge, a mountain of scraps, and a very big lunch.",
+    "by": "quokka"
+   },
+   {
+    "say": "Right. Find my way home. How hard can it be?",
+    "by": "quokka"
+   }
+  ]
+ },
+ "style_guide": {
+  "prompt": "90s VGA pixel art, LucasArts/Sierra adventure-game look, warm sunny Western Australian palette, cheeky and charming, crisp pixels with chunky dithering.",
+  "character_rules": "Characters keep the same proportions and palette as their reference sprite; the quokka has small round ears, a short face, a big smile and a chubby body."
+ },
+ "verbs": {
+  "order": [
+   "walk",
+   "look",
+   "pickup",
+   "use",
+   "talk"
+  ],
+  "labels": {
+   "walk": "Walk to",
+   "look": "Look at",
+   "pickup": "Pick up",
+   "use": "Use",
+   "talk": "Talk to"
+  },
+  "defaults": {
+   "look": "Nothing special about it.",
+   "pickup": "I can't pick that up.",
+   "use": "That doesn't do anything.",
+   "talk": "It's not much of a conversationalist.",
+   "use_item": "That won't work."
+  }
+ },
+ "flags": {
+  "got_pie": false,
+  "ibis_fed": false,
+  "got_chips": false,
+  "gulls_fed": false,
+  "ravens_told": false,
+  "got_vest": false,
+  "got_ticket": false,
+  "boarded": false,
+  "made_it": false
+ },
+ "items": {
+  "pie": {
+   "name": "half-eaten meat pie",
+   "icon": "🥧",
+   "image": "assets/icon_pie.png",
+   "look": "Half a meat pie. Still warm-ish. Don’t ask from what."
+  },
+  "chips": {
+   "name": "bucket of chips",
+   "icon": "🍟",
+   "look": "Chips. Salty, soggy, perfect."
+  },
+  "vest": {
+   "name": "hi-vis vest",
+   "icon": "🦺",
+   "look": "Bright orange. Makes me look like a very small road worker."
+  },
+  "ticket": {
+   "name": "ferry ticket",
+   "icon": "🎫",
+   "look": "One way to Rottnest. Somebody’s going to be cross."
+  }
+ },
+ "characters": {
+  "quokka": {
+   "name": "Davo",
+   "sprite": "assets/sprite_quokka.png",
+   "portrait": "assets/portrait_quokka.png",
+   "faces": "right",
+   "color": "#f5d76e",
+   "voice": {
+    "notes": "Chirpy, cheeky Aussie larrikin; always a bit full",
+    "pitch": 1.25,
+    "rate": 1.05
+   },
+   "idle": {
+    "breathe": 0.02,
+    "period": 2.8,
+    "actions": [
+     {
+      "type": "look",
+      "every": [
+       5,
+       10
+      ],
+      "dur": 1.6
+     },
+     {
+      "type": "hop",
+      "every": [
+       8,
+       14
+      ],
+      "dur": 0.8
+     }
+    ]
+   }
+  },
+  "ibis": {
+   "name": "The Bin Chickens",
+   "sprite": "assets/sprite_ibis.png",
+   "portrait": "assets/portrait_ibis.png",
+   "faces": "left",
+   "color": "#e8e8f0",
+   "voice": {
+    "notes": "Smug, nasal, a pair of tip-toll collectors",
+    "pitch": 0.8,
+    "rate": 0.95
+   },
+   "idle": {
+    "breathe": 0.018,
+    "period": 3.4,
+    "actions": [
+     {
+      "type": "ruffle",
+      "every": [
+       3,
+       7
+      ],
+      "dur": 0.9
+     },
+     {
+      "type": "bob",
+      "every": [
+       4,
+       9
+      ],
+      "dur": 1.2
+     }
+    ]
+   },
+   "actions": {
+    "talk": [
+     {
+      "if": {
+       "flags": {
+        "ibis_fed": true
+       }
+      },
+      "do": [
+       {
+        "say": "Toll’s paid. Off ya pop.",
+        "by": "ibis"
+       }
+      ]
+     },
+     {
+      "do": [
+       {
+        "say": "Oi. This is OUR tip, mate.",
+        "by": "ibis"
+       },
+       {
+        "say": "Nobody leaves without paying the toll. Something tasty. Pastry-based, ideally.",
+        "by": "ibis"
+       }
+      ]
+     }
+    ],
+    "look": [
+     {
+      "do": [
+       {
+        "say": "Bin chickens. White feathers, bald black heads, beaks built for bin-diving. They run this place."
+       }
+      ]
+     }
+    ],
+    "use_item": {
+     "pie": [
+      {
+       "do": [
+        {
+         "take": "pie"
+        },
+        {
+         "set": {
+          "ibis_fed": true
+         }
+        },
+        {
+         "sfx": "pickup"
+        },
+        {
+         "say": "PIE!",
+         "by": "ibis"
+        },
+        {
+         "say": "Pleasure doing business. Beach is that way.",
+         "by": "ibis"
+        },
+        {
+         "say": "They’re too busy fighting over the crust to stop me now."
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "seagull": {
+   "name": "The Seagulls",
+   "sprite": "assets/sprite_seagull.png",
+   "portrait": "assets/portrait_seagull.png",
+   "faces": "left",
+   "color": "#ff9b6a",
+   "voice": {
+    "notes": "Loud, greedy, every sentence is maaaaate",
+    "pitch": 1.6,
+    "rate": 1.2
+   },
+   "idle": {
+    "breathe": 0.02,
+    "period": 2.4,
+    "actions": [
+     {
+      "type": "hop",
+      "every": [
+       3,
+       6
+      ],
+      "dur": 0.7
+     },
+     {
+      "type": "flap",
+      "every": [
+       5,
+       10
+      ],
+      "dur": 1.0
+     }
+    ]
+   },
+   "actions": {
+    "talk": [
+     {
+      "if": {
+       "flags": {
+        "gulls_fed": true
+       }
+      },
+      "do": [
+       {
+        "say": "Maaaaaate! Head inland, past the wheat, follow the trucks to Freo. Ferry goes from there.",
+        "by": "seagull"
+       }
+      ]
+     },
+     {
+      "do": [
+       {
+        "say": "Maaaaaate.",
+        "by": "seagull"
+       },
+       {
+        "say": "Maaaaaate?",
+        "by": "seagull"
+       },
+       {
+        "say": "MAAAAAATE!",
+        "by": "seagull"
+       },
+       {
+        "say": "I think that means they want chips."
+       }
+      ]
+     }
+    ],
+    "look": [
+     {
+      "do": [
+       {
+        "say": "Seagulls. Every single one of them is looking at my mouth."
+       }
+      ]
+     }
+    ],
+    "use_item": {
+     "chips": [
+      {
+       "do": [
+        {
+         "take": "chips"
+        },
+        {
+         "set": {
+          "gulls_fed": true
+         }
+        },
+        {
+         "sfx": "pickup"
+        },
+        {
+         "say": "MAAAAAAAAATE!!",
+         "by": "seagull"
+        },
+        {
+         "say": "Heading home to Rotto? Go inland, past the wheat, follow the trucks to Freo!",
+         "by": "seagull"
+        }
+       ]
+      }
+     ],
+     "pie": [
+      {
+       "do": [
+        {
+         "say": "Maaaate. Nah.",
+         "by": "seagull"
+        },
+        {
+         "say": "Even seagulls have standards, apparently."
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  "raven": {
+   "name": "The Ravens",
+   "sprite": "assets/sprite_raven.png",
+   "portrait": "assets/portrait_raven.png",
+   "faces": "left",
+   "color": "#b9a6d6",
+   "voice": {
+    "notes": "Slow, droning, deeply unimpressed; only ever says cuuuuunt",
+    "pitch": 0.5,
+    "rate": 0.8
+   },
+   "idle": {
+    "breathe": 0.016,
+    "period": 3.8,
+    "actions": [
+     {
+      "type": "ruffle",
+      "every": [
+       4,
+       8
+      ],
+      "dur": 0.9
+     },
+     {
+      "type": "look",
+      "every": [
+       5,
+       9
+      ],
+      "dur": 1.5
+     }
+    ]
+   },
+   "actions": {
+    "talk": [
+     {
+      "if": {
+       "flags": {
+        "ravens_told": true
+       }
+      },
+      "do": [
+       {
+        "say": "Cuuuuunt.",
+        "by": "raven"
+       },
+       {
+        "say": "(The other raven tilts its head toward the haul road.)"
+       }
+      ]
+     },
+     {
+      "do": [
+       {
+        "say": "Cuuuuunt.",
+        "by": "raven"
+       },
+       {
+        "say": "Rude. Which way to the mine, fellas?"
+       },
+       {
+        "say": "Cuuuuunt.",
+        "by": "raven"
+       },
+       {
+        "say": "(Both ravens point their beaks at the haul road.)"
+       },
+       {
+        "set": {
+         "ravens_told": true
+        }
+       },
+       {
+        "say": "...Cheers, I think."
+       }
+      ]
+     }
+    ],
+    "look": [
+     {
+      "do": [
+       {
+        "say": "Two ravens on a fence post, judging everyone. Their vocabulary is limited but effective."
+       }
+      ]
+     }
+    ],
+    "use_item": {
+     "chips": [
+      {
+       "do": [
+        {
+         "say": "Cuuuuunt.",
+         "by": "raven"
+        },
+        {
+         "say": "They don’t want chips. They want to insult me. For free."
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ },
+ "music": {
+  "street_bounce": {
+   "tempo": 116,
+   "root": 261.6,
+   "mode": "major",
+   "style": "bounce",
+   "seed": 3
+  },
+  "diner_swing": {
+   "tempo": 96,
+   "root": 220.0,
+   "mode": "dorian",
+   "style": "swing",
+   "seed": 7
+  },
+  "basement_drone": {
+   "tempo": 70,
+   "root": 110.0,
+   "mode": "minor",
+   "style": "drone",
+   "seed": 11
+  },
+  "polka": {
+   "tempo": 150,
+   "root": 293.7,
+   "mode": "major",
+   "style": "polka",
+   "seed": 5
+  }
+ },
+ "rooms": {
+  "landfill": {
+   "name": "Landfill",
+   "background": "assets/bg_landfill.jpg",
+   "walkable": [
+    [
+     0,
+     392
+    ],
+    [
+     1024,
+     392
+    ],
+    [
+     1024,
+     576
+    ],
+    [
+     0,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 392,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "street_bounce"
+    }
+   ],
+   "props": [
+    {
+     "image": "assets/prop_pie.png",
+     "at": [
+      262,
+      436
+     ],
+     "if": {
+      "flags": {
+       "got_pie": false
+      }
+     }
+    }
+   ],
+   "actors": [
+    {
+     "character": "ibis",
+     "at": [
+      770,
+      520
+     ]
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "pie",
+     "name": "Half-eaten meat pie",
+     "polygon": [
+      [
+       256,
+       430
+      ],
+      [
+       360,
+       430
+      ],
+      [
+       360,
+       492
+      ],
+      [
+       256,
+       492
+      ]
+     ],
+     "walk_to": [
+      310,
+      520
+     ],
+     "if": {
+      "flags": {
+       "got_pie": false
+      }
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A meat pie. Only half eaten. Some people have no respect for pastry."
+         }
+        ]
+       }
+      ],
+      "pickup": [
+       {
+        "do": [
+         {
+          "give": "pie"
+         },
+         {
+          "set": {
+           "got_pie": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "Mine now. Breakfast of champions."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "skip",
+     "name": "Skip bin",
+     "polygon": [
+      [
+       730,
+       185
+      ],
+      [
+       1006,
+       185
+      ],
+      [
+       1006,
+       366
+      ],
+      [
+       730,
+       366
+      ]
+     ],
+     "walk_to": [
+      860,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A skip bin marked TIP. Five-star accommodation, if you ask the locals."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "do": [
+         {
+          "say": "I’ve had enough of rubbish for one day. Ask me again tomorrow."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "dozer",
+     "name": "Bulldozer",
+     "polygon": [
+      [
+       470,
+       66
+      ],
+      [
+       612,
+       66
+      ],
+      [
+       612,
+       150
+      ],
+      [
+       470,
+       150
+      ]
+     ],
+     "walk_to": [
+      540,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "The bulldozer that shoved me off the barge pile. We are not friends."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "bags",
+     "name": "Rubbish bags",
+     "polygon": [
+      [
+       16,
+       180
+      ],
+      [
+       728,
+       180
+      ],
+      [
+       728,
+       360
+      ],
+      [
+       16,
+       360
+      ]
+     ],
+     "walk_to": [
+      300,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Rubbish bags as far as the eye can see. Last night this was a buffet."
+         }
+        ]
+       }
+      ],
+      "pickup": [
+       {
+        "do": [
+         {
+          "say": "Too heavy. And I’m stuffed."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "onward",
+     "name": "To the beach",
+     "polygon": [
+      [
+       954,
+       380
+      ],
+      [
+       1024,
+       380
+      ],
+      [
+       1024,
+       576
+      ],
+      [
+       954,
+       576
+      ]
+     ],
+     "walk_to": [
+      990,
+      520
+     ],
+     "exit": {
+      "to": "beach",
+      "at": [
+       90,
+       520
+      ],
+      "if": {
+       "flags": {
+        "ibis_fed": true
+       }
+      },
+      "else": [
+       {
+        "do": [
+         {
+          "say": "The bin chickens have the track blocked. Nobody gets past without paying the toll."
+         }
+        ]
+       }
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "That way: the beach."
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "beach": {
+   "name": "Beach",
+   "background": "assets/bg_beach.jpg",
+   "walkable": [
+    [
+     0,
+     380
+    ],
+    [
+     1024,
+     380
+    ],
+    [
+     1024,
+     576
+    ],
+    [
+     0,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 380,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "diner_swing"
+    }
+   ],
+   "actors": [
+    {
+     "character": "seagull",
+     "at": [
+      560,
+      500
+     ]
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "back",
+     "name": "Back to the landfill",
+     "polygon": [
+      [
+       0,
+       380
+      ],
+      [
+       70,
+       380
+      ],
+      [
+       70,
+       576
+      ],
+      [
+       0,
+       576
+      ]
+     ],
+     "walk_to": [
+      34,
+      520
+     ],
+     "exit": {
+      "to": "landfill",
+      "at": [
+       920,
+       520
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "That way: the landfill."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "kiosk",
+     "name": "Fish and chip kiosk",
+     "polygon": [
+      [
+       818,
+       140
+      ],
+      [
+       1012,
+       140
+      ],
+      [
+       1012,
+       296
+      ],
+      [
+       818,
+       296
+      ]
+     ],
+     "walk_to": [
+      880,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "if": {
+         "flags": {
+          "got_chips": true
+         }
+        },
+        "do": [
+         {
+          "say": "A fish and chip kiosk. Closed. The sign says BACK IN 5 MINS. The sign is sun-bleached."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "A fish and chip kiosk. Someone dropped a whole bucket of chips under the counter!"
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "if": {
+         "flags": {
+          "got_chips": true
+         }
+        },
+        "do": [
+         {
+          "say": "Already got the chips. Leave some for the tourists."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "give": "chips"
+         },
+         {
+          "set": {
+           "got_chips": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A bucket of hot chips! Well, warm. Well... chips."
+         }
+        ]
+       }
+      ],
+      "pickup": [
+       {
+        "if": {
+         "flags": {
+          "got_chips": true
+         }
+        },
+        "do": [
+         {
+          "say": "Already got the chips."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "give": "chips"
+         },
+         {
+          "set": {
+           "got_chips": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A bucket of hot chips! Well, warm. Well... chips."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "jetty",
+     "name": "Jetty",
+     "polygon": [
+      [
+       300,
+       205
+      ],
+      [
+       728,
+       205
+      ],
+      [
+       728,
+       255
+      ],
+      [
+       300,
+       255
+      ]
+     ],
+     "walk_to": [
+      500,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "The jetty. Rottnest is out there somewhere. Too far to swim on a full stomach."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "flag",
+     "name": "Lifeguard flag",
+     "polygon": [
+      [
+       790,
+       55
+      ],
+      [
+       856,
+       55
+      ],
+      [
+       856,
+       290
+      ],
+      [
+       790,
+       290
+      ]
+     ],
+     "walk_to": [
+      800,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Red and yellow. Swim between the flags, mate."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "onward",
+     "name": "To the wheat fields",
+     "polygon": [
+      [
+       954,
+       380
+      ],
+      [
+       1024,
+       380
+      ],
+      [
+       1024,
+       576
+      ],
+      [
+       954,
+       576
+      ]
+     ],
+     "walk_to": [
+      990,
+      520
+     ],
+     "exit": {
+      "to": "wheat_fields",
+      "at": [
+       90,
+       520
+      ],
+      "if": {
+       "flags": {
+        "gulls_fed": true
+       }
+      },
+      "else": [
+       {
+        "do": [
+         {
+          "say": "The seagulls swarm me every time I try to leave. Something tells me they want feeding."
+         }
+        ]
+       }
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "That way: the wheat fields."
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "wheat_fields": {
+   "name": "Wheat Fields",
+   "background": "assets/bg_wheat.jpg",
+   "walkable": [
+    [
+     0,
+     410
+    ],
+    [
+     520,
+     372
+    ],
+    [
+     1024,
+     372
+    ],
+    [
+     1024,
+     410
+    ],
+    [
+     700,
+     576
+    ],
+    [
+     0,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 372,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "polka"
+    }
+   ],
+   "actors": [
+    {
+     "character": "raven",
+     "at": [
+      430,
+      470
+     ]
+    }
+   ],
+   "hotspots": [
+    {
+     "id": "back",
+     "name": "Back to the beach",
+     "polygon": [
+      [
+       0,
+       400
+      ],
+      [
+       70,
+       400
+      ],
+      [
+       70,
+       576
+      ],
+      [
+       0,
+       576
+      ]
+     ],
+     "walk_to": [
+      34,
+      520
+     ],
+     "exit": {
+      "to": "beach",
+      "at": [
+       920,
+       520
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Back to the beach."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "ute",
+     "name": "Rusty ute",
+     "polygon": [
+      [
+       656,
+       182
+      ],
+      [
+       996,
+       182
+      ],
+      [
+       996,
+       360
+      ],
+      [
+       656,
+       360
+      ]
+     ],
+     "walk_to": [
+      760,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A rusty old ute. The rego expired around the time I was born."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "do": [
+         {
+          "say": "The keys are gone. Also my feet don’t reach the pedals."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "silo",
+     "name": "Grain silo",
+     "polygon": [
+      [
+       496,
+       64
+      ],
+      [
+       586,
+       64
+      ],
+      [
+       586,
+       156
+      ],
+      [
+       496,
+       156
+      ]
+     ],
+     "walk_to": [
+      540,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A silo full of wheat. Bread, but before it got its act together."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "gate",
+     "name": "Farm gate",
+     "polygon": [
+      [
+       214,
+       238
+      ],
+      [
+       372,
+       238
+      ],
+      [
+       372,
+       350
+      ],
+      [
+       214,
+       350
+      ]
+     ],
+     "walk_to": [
+      300,
+      420
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A farm gate. Leads to more wheat. I’ve seen enough wheat."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "do": [
+         {
+          "say": "Shut the gate behind you, that’s the rule out here. I’ll leave it."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "onward",
+     "name": "Haul road to the mine",
+     "polygon": [
+      [
+       954,
+       330
+      ],
+      [
+       1024,
+       330
+      ],
+      [
+       1024,
+       420
+      ],
+      [
+       954,
+       420
+      ]
+     ],
+     "walk_to": [
+      990,
+      390
+     ],
+     "exit": {
+      "to": "gold_mine",
+      "at": [
+       90,
+       520
+      ],
+      "if": {
+       "flags": {
+        "ravens_told": true
+       }
+      },
+      "else": [
+       {
+        "do": [
+         {
+          "say": "Which way is it, though? Wheat in every direction. Maybe those ravens know."
+         }
+        ]
+       }
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A dusty road heading inland."
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "gold_mine": {
+   "name": "Gold Mine Site",
+   "background": "assets/bg_mine.jpg",
+   "walkable": [
+    [
+     0,
+     370
+    ],
+    [
+     1024,
+     370
+    ],
+    [
+     1024,
+     576
+    ],
+    [
+     0,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 370,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "basement_drone"
+    }
+   ],
+   "actors": [],
+   "hotspots": [
+    {
+     "id": "back",
+     "name": "Back to the wheat fields",
+     "polygon": [
+      [
+       0,
+       380
+      ],
+      [
+       70,
+       380
+      ],
+      [
+       70,
+       576
+      ],
+      [
+       0,
+       576
+      ]
+     ],
+     "walk_to": [
+      34,
+      520
+     ],
+     "exit": {
+      "to": "wheat_fields",
+      "at": [
+       900,
+       390
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "That way: the wheat fields."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "office",
+     "name": "Site office",
+     "polygon": [
+      [
+       750,
+       222
+      ],
+      [
+       1006,
+       222
+      ],
+      [
+       1006,
+       340
+      ],
+      [
+       750,
+       340
+      ]
+     ],
+     "walk_to": [
+      812,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "if": {
+         "flags": {
+          "got_vest": false
+         }
+        },
+        "do": [
+         {
+          "say": "The site office. A hi-vis vest is hanging on the door. Quokka-sized, if you squint."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "The site office. Nobody home. Probably at smoko."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "if": {
+         "flags": {
+          "got_vest": false
+         }
+        },
+        "do": [
+         {
+          "give": "vest"
+         },
+         {
+          "set": {
+           "got_vest": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A hi-vis vest! Now I look like I know what I’m doing."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "Locked. Smoko, I reckon."
+         }
+        ]
+       }
+      ],
+      "pickup": [
+       {
+        "if": {
+         "flags": {
+          "got_vest": false
+         }
+        },
+        "do": [
+         {
+          "give": "vest"
+         },
+         {
+          "set": {
+           "got_vest": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A hi-vis vest! Now I look like I know what I’m doing."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "Nothing else to pinch."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "sign",
+     "name": "Safety sign",
+     "polygon": [
+      [
+       654,
+       230
+      ],
+      [
+       716,
+       230
+      ],
+      [
+       716,
+       320
+      ],
+      [
+       654,
+       320
+      ]
+     ],
+     "walk_to": [
+      690,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "NO ENTRY WITHOUT HI-VIS. Safety first, even for quokkas."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "truck",
+     "name": "Haul truck",
+     "polygon": [
+      [
+       20,
+       186
+      ],
+      [
+       300,
+       186
+      ],
+      [
+       300,
+       346
+      ],
+      [
+       20,
+       346
+      ]
+     ],
+     "walk_to": [
+      200,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "The wheels on this thing are taller than my whole family stacked up."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "do": [
+         {
+          "say": "I’m not licensed for anything bigger than a shopping trolley."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "pit",
+     "name": "Open-cut pit",
+     "polygon": [
+      [
+       0,
+       90
+      ],
+      [
+       1024,
+       90
+      ],
+      [
+       1024,
+       220
+      ],
+      [
+       0,
+       220
+      ]
+     ],
+     "walk_to": [
+      500,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "A hole so big you could lose Rottnest in it. Please don’t."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "onward",
+     "name": "Road to Fremantle",
+     "polygon": [
+      [
+       954,
+       370
+      ],
+      [
+       1024,
+       370
+      ],
+      [
+       1024,
+       576
+      ],
+      [
+       954,
+       576
+      ]
+     ],
+     "walk_to": [
+      990,
+      520
+     ],
+     "exit": {
+      "to": "fremantle",
+      "at": [
+       160,
+       520
+      ],
+      "if": {
+       "flags": {
+        "got_vest": true
+       }
+      },
+      "else": [
+       {
+        "do": [
+         {
+          "say": "A security bloke yells: OI! NO HI-VIS, NO ENTRY! Fair enough."
+         }
+        ]
+       }
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "The road out, through the mine gate. Hi-vis only."
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "fremantle": {
+   "name": "Fremantle",
+   "background": "assets/bg_fremantle.jpg",
+   "walkable": [
+    [
+     110,
+     576
+    ],
+    [
+     140,
+     430
+    ],
+    [
+     300,
+     356
+    ],
+    [
+     600,
+     352
+    ],
+    [
+     1024,
+     476
+    ],
+    [
+     1024,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 352,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "diner_swing"
+    }
+   ],
+   "props": [],
+   "actors": [],
+   "hotspots": [
+    {
+     "id": "back",
+     "name": "Back to the gold mine",
+     "polygon": [
+      [
+       110,
+       470
+      ],
+      [
+       180,
+       470
+      ],
+      [
+       180,
+       576
+      ],
+      [
+       110,
+       576
+      ]
+     ],
+     "walk_to": [
+      150,
+      540
+     ],
+     "exit": {
+      "to": "gold_mine",
+      "at": [
+       900,
+       520
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Back to the mine."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "cafe",
+     "name": "Cafe tables",
+     "polygon": [
+      [
+       500,
+       286
+      ],
+      [
+       790,
+       286
+      ],
+      [
+       790,
+       412
+      ],
+      [
+       500,
+       412
+      ]
+     ],
+     "walk_to": [
+      640,
+      430
+     ],
+     "actions": {
+      "look": [
+       {
+        "if": {
+         "flags": {
+          "got_ticket": false
+         }
+        },
+        "do": [
+         {
+          "say": "Cappuccino Strip. Someone left a ferry ticket under the sugar bowl!"
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "Flat whites as far as the eye can see."
+         }
+        ]
+       }
+      ],
+      "pickup": [
+       {
+        "if": {
+         "flags": {
+          "got_ticket": false
+         }
+        },
+        "do": [
+         {
+          "give": "ticket"
+         },
+         {
+          "set": {
+           "got_ticket": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A ferry ticket to Rottnest! Finders keepers."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "Just crumbs left. I already ate those."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "if": {
+         "flags": {
+          "got_ticket": false
+         }
+        },
+        "do": [
+         {
+          "give": "ticket"
+         },
+         {
+          "set": {
+           "got_ticket": true
+          }
+         },
+         {
+          "sfx": "pickup"
+         },
+         {
+          "say": "A ferry ticket to Rottnest! Finders keepers."
+         }
+        ]
+       },
+       {
+        "do": [
+         {
+          "say": "No table service for quokkas, apparently."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "clock",
+     "name": "Clock tower",
+     "polygon": [
+      [
+       352,
+       40
+      ],
+      [
+       412,
+       40
+      ],
+      [
+       412,
+       260
+      ],
+      [
+       352,
+       260
+      ]
+     ],
+     "walk_to": [
+      380,
+      380
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Freo time: about half past fish and chips."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "ferry",
+     "name": "Rottnest ferry",
+     "polygon": [
+      [
+       146,
+       290
+      ],
+      [
+       290,
+       290
+      ],
+      [
+       290,
+       336
+      ],
+      [
+       146,
+       336
+      ]
+     ],
+     "walk_to": [
+      250,
+      400
+     ],
+     "exit": {
+      "to": "rottnest",
+      "at": [
+       140,
+       470
+      ],
+      "if": {
+       "flags": {
+        "boarded": true
+       }
+      },
+      "else": [
+       {
+        "do": [
+         {
+          "say": "The ferry to Rottnest! No ticket, no ride, says the deckhand."
+         }
+        ]
+       }
+      ]
+     },
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "The Rottnest ferry. My ride home, if I can get on it."
+         }
+        ]
+       }
+      ],
+      "use_item": {
+       "ticket": [
+        {
+         "do": [
+          {
+           "take": "ticket"
+          },
+          {
+           "set": {
+            "boarded": true
+           }
+          },
+          {
+           "sfx": "door"
+          },
+          {
+           "say": "One quokka, one way, please. The deckhand doesn’t even blink."
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  "rottnest": {
+   "name": "Rottnest Island",
+   "background": "assets/bg_rottnest.jpg",
+   "walkable": [
+    [
+     0,
+     372
+    ],
+    [
+     1024,
+     372
+    ],
+    [
+     1024,
+     576
+    ],
+    [
+     0,
+     576
+    ]
+   ],
+   "depth": {
+    "far_y": 372,
+    "far_scale": 0.55,
+    "near_y": 576,
+    "near_scale": 0.86
+   },
+   "music": [
+    {
+     "track": "street_bounce"
+    }
+   ],
+   "actors": [],
+   "hotspots": [
+    {
+     "id": "lighthouse",
+     "name": "Lighthouse",
+     "polygon": [
+      [
+       604,
+       36
+      ],
+      [
+       646,
+       36
+      ],
+      [
+       646,
+       132
+      ],
+      [
+       604,
+       132
+      ]
+     ],
+     "walk_to": [
+      620,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "Wadjemup Lighthouse. Means I’m nearly home."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "sign",
+     "name": "Signpost",
+     "polygon": [
+      [
+       276,
+       232
+      ],
+      [
+       330,
+       232
+      ],
+      [
+       330,
+       330
+      ],
+      [
+       276,
+       330
+      ]
+     ],
+     "walk_to": [
+      300,
+      400
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "This way to the burrow. Mum’s going to kill me."
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "id": "burrow",
+     "name": "Home sweet burrow",
+     "polygon": [
+      [
+       800,
+       236
+      ],
+      [
+       952,
+       236
+      ],
+      [
+       952,
+       352
+      ],
+      [
+       800,
+       352
+      ]
+     ],
+     "walk_to": [
+      860,
+      410
+     ],
+     "actions": {
+      "look": [
+       {
+        "do": [
+         {
+          "say": "My burrow. Never been happier to see a hole in the ground."
+         }
+        ]
+       }
+      ],
+      "use": [
+       {
+        "do": [
+         {
+          "set": {
+           "made_it": true
+          }
+         },
+         {
+          "sfx": "fanfare"
+         },
+         {
+          "say": "Home! Now, who wants to hear about the time I went walkabout?"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "dialogues": {},
+ "puzzles": [
+  {
+   "id": "find_pie",
+   "name": "Find the half-eaten pie",
+   "requires": [],
+   "solved_when": {
+    "flags": {
+     "got_pie": true
+    }
+   }
+  },
+  {
+   "id": "pay_toll",
+   "name": "Pay the Bin Chickens’ toll",
+   "requires": [
+    "find_pie"
+   ],
+   "solved_when": {
+    "flags": {
+     "ibis_fed": true
+    }
+   }
+  },
+  {
+   "id": "find_chips",
+   "name": "Find chips at the kiosk",
+   "requires": [
+    "pay_toll"
+   ],
+   "solved_when": {
+    "flags": {
+     "got_chips": true
+    }
+   }
+  },
+  {
+   "id": "feed_gulls",
+   "name": "Feed the Seagulls",
+   "requires": [
+    "find_chips"
+   ],
+   "solved_when": {
+    "flags": {
+     "gulls_fed": true
+    }
+   }
+  },
+  {
+   "id": "ask_ravens",
+   "name": "Ask the Ravens the way",
+   "requires": [
+    "feed_gulls"
+   ],
+   "solved_when": {
+    "flags": {
+     "ravens_told": true
+    }
+   }
+  },
+  {
+   "id": "get_vest",
+   "name": "Borrow a hi-vis vest",
+   "requires": [
+    "ask_ravens"
+   ],
+   "solved_when": {
+    "flags": {
+     "got_vest": true
+    }
+   }
+  },
+  {
+   "id": "find_ticket",
+   "name": "Find a ferry ticket",
+   "requires": [
+    "get_vest"
+   ],
+   "solved_when": {
+    "flags": {
+     "got_ticket": true
+    }
+   }
+  },
+  {
+   "id": "board_ferry",
+   "name": "Catch the Rottnest ferry",
+   "requires": [
+    "find_ticket"
+   ],
+   "solved_when": {
+    "flags": {
+     "boarded": true
+    }
+   }
+  },
+  {
+   "id": "get_home",
+   "name": "Get home to the burrow",
+   "requires": [
+    "board_ferry"
+   ],
+   "solved_when": {
+    "flags": {
+     "made_it": true
+    }
+   }
+  }
+ ],
+ "win": {
+  "if": {
+   "flags": {
+    "made_it": true
+   }
+  },
+  "title": "MADE IT HOME",
+  "text": "Davo is back in his burrow on Rottnest, full of pie, chips and stories. Nobody believes a word."
+ }
+}

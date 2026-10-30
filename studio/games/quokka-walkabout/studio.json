@@ -1,0 +1,144 @@
+{
+ "pitch": "I want to make a pixel art game about a fat little quokka from rottnest island who falls asleep on a rubbish barge after gorging himself on scraps and wakes up in a landfill on mainland Western Australia. He has to find his way home. There are funny interactions with other animals, it's all very Aussie, a little crude but still mostly PG (like Sam and max hit the road). Some character ideas - ravens that say cuuuuunt, sea goals that say maaaaaate, bin chickens (ibis). Give a 90s throwback vibe. Setting examples include beach, wheat fields, gold mine site, urban, something iconic…",
+ "summary": {
+  "source": "sample",
+  "from": "I want to make a pixel art game about a fat little quokka from rottnest island who falls asleep on a rubbish barge after gorging himself on scraps and wakes up in a landfill on mainland Western Australia. He has to find his way home. There are funny interactions with other animals, it's all very Aussie, a little crude but still mostly PG (like Sam and max hit the road). Some character ideas - ravens that say cuuuuunt, sea goals that say maaaaaate, bin chickens (ibis). Give a 90s throwback vibe. Setting examples include beach, wheat fields, gold mine site, urban, something iconic…",
+  "logline": "A fat little quokka from Rottnest Island falls asleep on a rubbish barge after gorging himself on scraps, wakes up in a landfill on mainland Western Australia, and has to find his way home.",
+  "title_options": [
+   "Quokka Gone Walkabout",
+   "The Long Way Home",
+   "Rotto or Bust"
+  ],
+  "tone": [
+   "Comedy",
+   "Very Aussie",
+   "A little crude",
+   "Mostly PG",
+   "90s throwback",
+   "like Sam & Max Hit the Road"
+  ],
+  "goal": "find his way home",
+  "language": "keep",
+  "strong": [
+   "cuuuuunt"
+  ],
+  "open_places": [
+   {
+    "said": "something iconic",
+    "ideas": [
+     "Perth / Fremantle (the port, Freo markets)",
+     "The Pinnacles desert"
+    ]
+   }
+  ]
+ },
+ "style": {
+  "selected": "sierra_pixel",
+  "notes": "90s throwback feel. Warm, sunny, cheeky."
+ },
+ "characters": {
+  "quokka": {
+   "role": "The hero",
+   "personality": "Fat, cheeky, always hungry, eternally optimistic",
+   "look": "A chubby quokka: small round ears, short face, big happy smile, grey-brown fur, pot belly full of scraps"
+  },
+  "ibis": {
+   "role": "Tip-toll collectors at the landfill",
+   "personality": "Smug, scheming, entitled",
+   "look": "Australian white ibis: white body, bald black head, long curved black beak"
+  },
+  "seagull": {
+   "role": "Beach gang",
+   "personality": "Loud, greedy, friendly once fed. Catchphrase: maaaaaate",
+   "look": "Silver gulls: white, grey wings, red beaks and legs"
+  },
+  "raven": {
+   "role": "Fence-post philosophers in the wheatbelt",
+   "personality": "Deadpan, rude, secretly helpful. Catchphrase: cuuuuunt",
+   "look": "Glossy black Australian ravens with pale eyes"
+  }
+ },
+ "beats": [
+  {
+   "id": "b1",
+   "title": "Wake up in the tip",
+   "text": "Davo gorged himself on scraps, fell asleep on a rubbish barge and woke up in a landfill on mainland WA."
+  },
+  {
+   "id": "b2",
+   "title": "The toll",
+   "text": "The Bin Chickens won’t let Davo leave the landfill without paying a pastry toll."
+  },
+  {
+   "id": "b3",
+   "title": "Maaaaaate",
+   "text": "At the beach, the Seagulls trade directions for chips."
+  },
+  {
+   "id": "b4",
+   "title": "The wheatbelt",
+   "text": "Lost in the wheat, Davo asks the Ravens for directions. They are rude about it."
+  },
+  {
+   "id": "b5",
+   "title": "Safety first",
+   "text": "The gold mine won’t let anyone through without hi-vis."
+  },
+  {
+   "id": "b6",
+   "title": "Freo",
+   "text": "In Fremantle, Davo needs a ferry ticket to get home."
+  },
+  {
+   "id": "b7",
+   "title": "Home",
+   "text": "Davo makes it back to his burrow on Rottnest Island."
+  }
+ ],
+ "rooms": {
+  "landfill": "Where Davo wakes up. Mountains of rubbish, a bulldozer and two bin chickens running a toll booth.",
+  "beach": "A Cottesloe-style beach with a jetty and a fish and chip kiosk. Seagull territory.",
+  "wheat_fields": "Golden wheatbelt, a silo, a rusty ute and two ravens on the fence.",
+  "gold_mine": "A Kalgoorlie-style open-cut pit. No hi-vis, no entry.",
+  "fremantle": "Fremantle’s Cappuccino Strip; the Rottnest ferry leaves from the harbour.",
+  "rottnest": "Home: white sand, turquoise bay, the lighthouse and Davo’s burrow."
+ },
+ "puzzles": {
+  "find_pie": {
+   "description": "Find the half-eaten pie.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "pay_toll": {
+   "description": "Pay the Bin Chickens’ toll.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "find_chips": {
+   "description": "Find chips at the kiosk.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "feed_gulls": {
+   "description": "Feed the Seagulls.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "ask_ravens": {
+   "description": "Ask the Ravens the way.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "get_vest": {
+   "description": "Borrow a hi-vis vest.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "find_ticket": {
+   "description": "Find a ferry ticket.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "board_ferry": {
+   "description": "Catch the Rottnest ferry.",
+   "blocked_story": "Davo never makes it home"
+  },
+  "get_home": {
+   "description": "Get home to the burrow.",
+   "blocked_story": "Davo never makes it home"
+  }
+ }
+}
